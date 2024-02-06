@@ -6,6 +6,10 @@ import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
 import carmencaniglia.exedraAsd.repositories.AbbonamentoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +20,10 @@ public class AbbonamentoService {
     @Autowired
     private AbbonamentoDAO abbonamentoDAO;
 
-    public List<Abbonamento> getAbbonamenti(){
-        return abbonamentoDAO.findAll();
+    public Page<Abbonamento> getAbbonamenti(int page, int size, String orderBy){
+        if(size >= 100) size = 100;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(orderBy));
+        return abbonamentoDAO.findAll(pageable);
     }
 
     public Abbonamento save(Abbonamento body){

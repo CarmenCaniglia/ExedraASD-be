@@ -6,6 +6,10 @@ import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
 import carmencaniglia.exedraAsd.repositories.DettaglioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +19,10 @@ public class DettaglioService {
     @Autowired
     private DettaglioDAO dettaglioDAO;
 
-    public List<DettaglioOrdine> getDettagli(){
-        return dettaglioDAO.findAll();
+    public Page<DettaglioOrdine> getDettagli(int page, int size, String orderBy){
+        if(size >= 100) size = 100;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(orderBy));
+        return dettaglioDAO.findAll(pageable);
     }
 
     public DettaglioOrdine save(DettaglioOrdine body){

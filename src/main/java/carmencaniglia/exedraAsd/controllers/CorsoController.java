@@ -4,6 +4,7 @@ import carmencaniglia.exedraAsd.entities.Corso;
 import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.services.CorsoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,10 @@ public class CorsoController {
     private CorsoService corsoService;
 
     @GetMapping
-    public List<Corso> getCorsi(){
-        return corsoService.getCorsi();
+    public Page<Corso> getCorsi(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "id") String orderBy){
+        return corsoService.getCorsi(page, size, orderBy);
     }
 
     @GetMapping("/{id}")

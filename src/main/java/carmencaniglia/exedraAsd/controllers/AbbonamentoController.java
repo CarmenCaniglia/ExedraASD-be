@@ -3,6 +3,7 @@ package carmencaniglia.exedraAsd.controllers;
 import carmencaniglia.exedraAsd.entities.Abbonamento;
 import carmencaniglia.exedraAsd.services.AbbonamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,10 @@ public class AbbonamentoController {
     private AbbonamentoService abbonamentoService;
 
     @GetMapping
-    public List<Abbonamento> getAbbonamenti(){
-        return abbonamentoService.getAbbonamenti();
+    public Page<Abbonamento> getAbbonamenti(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size,
+                                            @RequestParam(defaultValue = "id") String orderBy){
+        return abbonamentoService.getAbbonamenti(page, size, orderBy);
     }
 
     @GetMapping("/{id}")

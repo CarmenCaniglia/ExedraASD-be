@@ -3,6 +3,7 @@ package carmencaniglia.exedraAsd.controllers;
 import carmencaniglia.exedraAsd.entities.PrenotazioneCorso;
 import carmencaniglia.exedraAsd.services.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,10 @@ public class PrenotazioneController {
     private PrenotazioneService prenotazioneService;
 
     @GetMapping
-    public List<PrenotazioneCorso> getPrenotazioni(){
-        return prenotazioneService.getPrenotazioni();
+    public Page<PrenotazioneCorso> getPrenotazioni(@RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size,
+                                                   @RequestParam(defaultValue = "id") String orderBy){
+        return prenotazioneService.getPrenotazioni(page,size,orderBy);
     }
 
     @GetMapping("/{id}")

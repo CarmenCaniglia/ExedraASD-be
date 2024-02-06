@@ -4,6 +4,7 @@ import carmencaniglia.exedraAsd.entities.Ordine;
 import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.services.OrdineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,10 @@ public class OrdineController {
     private OrdineService ordineService;
 
     @GetMapping
-    public List<Ordine> getOrdini(){
-        return ordineService.getOrdini();
+    public Page<Ordine> getOrdini(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(defaultValue = "id") String orderBy){
+        return ordineService.getOrdini(page, size, orderBy);
     }
 
     @GetMapping("/{id}")

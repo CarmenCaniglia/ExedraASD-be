@@ -4,6 +4,7 @@ import carmencaniglia.exedraAsd.entities.DettaglioOrdine;
 import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.services.DettaglioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,10 @@ public class DettaglioController {
     private DettaglioService dettaglioService;
 
     @GetMapping
-    public List<DettaglioOrdine> getDettagli(){
-        return dettaglioService.getDettagli();
+    public Page<DettaglioOrdine> getDettagli(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size,
+                                             @RequestParam(defaultValue = "id") String orderBy){
+        return dettaglioService.getDettagli(page,size,orderBy);
     }
 
     @GetMapping("/{id}")

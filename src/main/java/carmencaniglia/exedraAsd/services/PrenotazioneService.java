@@ -4,6 +4,10 @@ import carmencaniglia.exedraAsd.entities.PrenotazioneCorso;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
 import carmencaniglia.exedraAsd.repositories.PrenotazioneDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +18,10 @@ public class PrenotazioneService {
     @Autowired
     private PrenotazioneDAO prenotazioneDAO;
 
-    public List<PrenotazioneCorso> getPrenotazioni(){
-        return prenotazioneDAO.findAll();
+    public Page<PrenotazioneCorso> getPrenotazioni(int page, int size, String orderBy){
+        if(size >= 100) size = 100;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(orderBy));
+        return prenotazioneDAO.findAll(pageable);
     }
 
     public PrenotazioneCorso save(PrenotazioneCorso body){

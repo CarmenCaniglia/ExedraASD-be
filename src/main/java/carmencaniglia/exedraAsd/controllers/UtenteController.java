@@ -3,6 +3,7 @@ package carmencaniglia.exedraAsd.controllers;
 import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,10 @@ public class UtenteController {
     private UtenteService utenteService;
 
     @GetMapping
-    public List<Utente> getUsers(){
-        return utenteService.getUtenti();
+    public Page<Utente> getUsers(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "id") String orderBy){
+        return utenteService.getUtenti(page, size, orderBy);
     }
 
     @GetMapping("/{id}")
