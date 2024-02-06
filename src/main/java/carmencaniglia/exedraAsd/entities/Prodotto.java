@@ -2,10 +2,13 @@ package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.Categoria;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "prodotti")
-
+@Getter
+@Setter
 public class Prodotto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

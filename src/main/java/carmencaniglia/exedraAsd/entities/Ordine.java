@@ -2,12 +2,16 @@ package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.StatoOrdine;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "ordini")
+@Getter
+@Setter
 public class Ordine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
