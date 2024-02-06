@@ -2,11 +2,15 @@ package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.Role;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "utenti")
+@Getter
+@Setter
 public class Utente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
