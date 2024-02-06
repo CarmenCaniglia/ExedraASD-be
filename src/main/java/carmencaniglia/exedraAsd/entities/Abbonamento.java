@@ -2,9 +2,13 @@ package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.TipoAbbonamento;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "abbonamenti")
+@Getter
+@Setter
 public class Abbonamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
