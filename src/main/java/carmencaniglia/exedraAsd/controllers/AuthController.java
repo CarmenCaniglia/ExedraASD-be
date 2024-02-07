@@ -34,7 +34,7 @@ public class AuthController {
         System.out.println(validation);
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
-            throw new BadRequestException("Ci sono errori nel payload!");
+            throw new BadRequestException(validation.getAllErrors().stream().toList().toString());
         }else{
             Utente utente = authService.save(newUserPayload);
             return new UtenteResponseDTO(utente.getId());

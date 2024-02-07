@@ -39,11 +39,11 @@ public class UtenteService {
         utenteDAO.delete(found);
     }
 
-    public Utente findByIdAndUpdate(long id, Utente body){
+    public Utente findByIdAndUpdate(long id, UtenteDTO utenteDTO){
         Utente found = this.findById(id);
-        found.setNome(body.getNome());
-        found.setCognome(body.getCognome());
-        found.setEmail(body.getEmail());
+        found.setNome(utenteDTO.nome());
+        found.setCognome(utenteDTO.cognome());
+        found.setEmail(utenteDTO.email());
         return utenteDAO.save(found);
     }
 

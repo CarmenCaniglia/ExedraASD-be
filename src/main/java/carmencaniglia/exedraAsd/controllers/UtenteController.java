@@ -4,6 +4,7 @@ import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.payloads.UtenteDTO;
 import carmencaniglia.exedraAsd.payloads.UtenteResponseDTO;
+import carmencaniglia.exedraAsd.services.AuthService;
 import carmencaniglia.exedraAsd.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ public class UtenteController {
 
     @Autowired
     private UtenteService utenteService;
+    @Autowired
+    private AuthService authService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -58,7 +61,7 @@ public class UtenteController {
             System.out.println(validation.getAllErrors());
             throw new BadRequestException("Errori nel payload!");
         }else {
-            Utente nuovoUtente = utenteService.save(newUserPayload);
+            Utente nuovoUtente = authService.save(newUserPayload);
             return new UtenteResponseDTO(nuovoUtente.getId());
         }
     }
