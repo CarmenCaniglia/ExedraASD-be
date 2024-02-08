@@ -4,6 +4,7 @@ import carmencaniglia.exedraAsd.entities.Corso;
 import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
+import carmencaniglia.exedraAsd.payloads.CorsoDTO;
 import carmencaniglia.exedraAsd.repositories.CorsoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,14 @@ public class CorsoService {
         return corsoDAO.findAll(pageable);
     }
 
-    public Corso save(Corso body){
-        return corsoDAO.save(body);
+    public Corso save(CorsoDTO body){
+        Corso corso = new Corso();
+        corso.setNome(body.nome());
+        corso.setDescrizione(body.descrizione());
+        corso.setOrario(body.orario());
+        corso.setMaxPartecipanti(body.maxPartecipanti());
+
+        return corsoDAO.save(corso);
     }
 
     public Corso findById(long id){
@@ -39,12 +46,12 @@ public class CorsoService {
         corsoDAO.delete(found);
     }
 
-    public Corso findByIdAndUpdate(long id, Corso body){
+    public Corso findByIdAndUpdate(long id, CorsoDTO body){
         Corso found = this.findById(id);
-        found.setNome(body.getNome());
-        found.setDescrizione(body.getDescrizione());
-        found.setOrario(body.getOrario());
-        found.setMaxPartecipanti(body.getMaxPartecipanti());
+        found.setNome(body.nome());
+        found.setDescrizione(body.descrizione());
+        found.setOrario(body.orario());
+        found.setMaxPartecipanti(body.maxPartecipanti());
         return corsoDAO.save(found);
     }
 }

@@ -1,8 +1,11 @@
 package carmencaniglia.exedraAsd.services;
 
 import carmencaniglia.exedraAsd.entities.SchedaAllenamento;
+import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
+import carmencaniglia.exedraAsd.payloads.AllenamentoDTO;
 import carmencaniglia.exedraAsd.repositories.AllenamentoDAO;
+import carmencaniglia.exedraAsd.repositories.UtenteDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +19,8 @@ import java.util.List;
 public class AllenamentoService {
     @Autowired
     private AllenamentoDAO allenamentoDAO;
+    @Autowired
+    private UtenteDAO utenteDAO;
 
     public Page<SchedaAllenamento> getSchedeAllenamento(int page, int size, String orderBy){
         if(size >= 100) size = 100;
@@ -23,9 +28,15 @@ public class AllenamentoService {
         return allenamentoDAO.findAll(pageable);
     }
 
-    public SchedaAllenamento save(SchedaAllenamento body){
+    public SchedaAllenamento save(AllenamentoDTO body){
+        Utente utente = utenteDAO.findById(body.utenteId())
+                .orElseThrow(()-> new NotFoundException("Utente con id: "+body.utenteId()+" non trovato!"));
 
-        return allenamentoDAO.save(body);
+        SchedaAllenamento allenamento = new SchedaAllenamento();
+        allenamento.setUtente(utente);
+        allenamento.setDescrizione(body.descrizione());
+        allenamento.setTitolo(body.titolo());
+        return allenamentoDAO.save(allenamento);
     }
 
     public SchedaAllenamento findById(long id){
@@ -38,10 +49,10 @@ public class AllenamentoService {
         allenamentoDAO.delete(found);
     }
 
-    public SchedaAllenamento findByIdAndUpdate(long id, SchedaAllenamento body){
+    public SchedaAllenamento findByIdAndUpdate(long id, AllenamentoDTO body){
         SchedaAllenamento found = this.findById(id);
-        found.setTitolo(body.getTitolo());
-        found.setDescrizione(body.getDescrizione());
+        found.setTitolo(body.titolo());
+        found.setDescrizione(body.descrizione());
         return allenamentoDAO.save(found);
     }
 }

@@ -1,10 +1,15 @@
 package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.Abbonamento;
+import carmencaniglia.exedraAsd.exceptions.BadRequestException;
+import carmencaniglia.exedraAsd.payloads.AbbonamentoDTO;
+import carmencaniglia.exedraAsd.payloads.AbbonamentoResponseDTO;
 import carmencaniglia.exedraAsd.services.AbbonamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +35,20 @@ public class AbbonamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Abbonamento saveAbbonamento(@RequestBody Abbonamento newAbbonamentoPayload){
-        return abbonamentoService.save(newAbbonamentoPayload);
+    public AbbonamentoResponseDTO saveAbbonamento(@RequestBody @Validated AbbonamentoDTO newAbbonamentoDTO, BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException("Errori nel payload!");
+        }else{
+            Abbonamento savedAbbonamento = abbonamentoService.save(newAbbonamentoDTO);
+            return new AbbonamentoResponseDTO(savedAbbonamento.getId());
+        }
     }
 
     @PutMapping("/{id}")
-    public Abbonamento findByIdAndUpdate(@PathVariable long id,@RequestBody Abbonamento modifiedAbbonamentoPayload){
-        return abbonamentoService.findByIdAndUpdate(id, modifiedAbbonamentoPayload);
+    public AbbonamentoResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated AbbonamentoDTO abbonamentoDTO){
+        Abbonamento updatedAbbonamento = abbonamentoService.findByIdAndUpdate(id, abbonamentoDTO);
+        return new AbbonamentoResponseDTO(updatedAbbonamento.getId());
     }
 
     @DeleteMapping("/{id}")

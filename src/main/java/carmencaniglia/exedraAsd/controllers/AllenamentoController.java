@@ -2,10 +2,15 @@ package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.SchedaAllenamento;
 import carmencaniglia.exedraAsd.entities.Utente;
+import carmencaniglia.exedraAsd.exceptions.BadRequestException;
+import carmencaniglia.exedraAsd.payloads.AllenamentoDTO;
+import carmencaniglia.exedraAsd.payloads.AllenamentoResponseDTO;
 import carmencaniglia.exedraAsd.services.AllenamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +35,20 @@ public class AllenamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SchedaAllenamento saveSchedaAllenamento(@RequestBody SchedaAllenamento newAllenamentoPayload){
-        return allenamentoService.save(newAllenamentoPayload);
+    public AllenamentoResponseDTO saveSchedaAllenamento(@RequestBody @Validated AllenamentoDTO newAllenamentoDTO, BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException("Errori nel payload!");
+        }else {
+            SchedaAllenamento savedAllenamento = allenamentoService.save(newAllenamentoDTO);
+            return new AllenamentoResponseDTO(savedAllenamento.getId());
+        }
     }
 
     @PutMapping("/{id}")
-    public SchedaAllenamento findByIdAndUpdate(@PathVariable long id,@RequestBody SchedaAllenamento modifiedAllenamentoPayload){
-        return allenamentoService.findByIdAndUpdate(id, modifiedAllenamentoPayload);
+    public AllenamentoResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated AllenamentoDTO allenamentoDTO){
+        SchedaAllenamento updatedAllenamento = allenamentoService.findByIdAndUpdate(id, allenamentoDTO);
+        return new AllenamentoResponseDTO(updatedAllenamento.getId());
     }
 
     @DeleteMapping("/{id}")

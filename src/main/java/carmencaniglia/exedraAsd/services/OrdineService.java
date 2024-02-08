@@ -1,8 +1,11 @@
 package carmencaniglia.exedraAsd.services;
 
 import carmencaniglia.exedraAsd.entities.Ordine;
+import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
+import carmencaniglia.exedraAsd.payloads.OrdineDTO;
 import carmencaniglia.exedraAsd.repositories.OrdineDAO;
+import carmencaniglia.exedraAsd.repositories.UtenteDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +20,8 @@ public class OrdineService {
 
     @Autowired
     private OrdineDAO ordineDAO;
+    @Autowired
+    private UtenteDAO utenteDAO;
 
     public Page<Ordine> getOrdini(int page, int size, String orderBy){
         if(size >= 100) size = 100;
@@ -24,8 +29,15 @@ public class OrdineService {
         return ordineDAO.findAll(pageable);
     }
 
-    public Ordine save(Ordine body){
-        return ordineDAO.save(body);
+    public Ordine save(OrdineDTO body){
+        Utente utente = utenteDAO.findById(body.utenteId())
+                .orElseThrow(()-> new NotFoundException("Utente con id: "+body.utenteId()+" non trovato!"));
+
+        Ordine ordine = new Ordine();
+        ordine.setUtente(utente);
+        ordine.setDataOrdine(body.dataOrdine());
+        ordine.setStatoOrdine(body.statoOrdine());
+        return ordineDAO.save(ordine);
     }
 
     public Ordine findById(long id){
@@ -38,10 +50,10 @@ public class OrdineService {
         ordineDAO.delete(found);
     }
 
-    public Ordine findByIdAndUpdate(long id, Ordine body){
+    public Ordine findByIdAndUpdate(long id, OrdineDTO body){
         Ordine found = this.findById(id);
-        found.setDataOrdine(body.getDataOrdine());
-        found.setStatoOrdine(body.getStatoOrdine());
+        found.setDataOrdine(body.dataOrdine());
+        found.setStatoOrdine(body.statoOrdine());
         return ordineDAO.save(found);
     }
 }

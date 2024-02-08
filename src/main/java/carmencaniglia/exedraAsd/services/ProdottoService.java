@@ -2,6 +2,7 @@ package carmencaniglia.exedraAsd.services;
 
 import carmencaniglia.exedraAsd.entities.Prodotto;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
+import carmencaniglia.exedraAsd.payloads.ProdottoDTO;
 import carmencaniglia.exedraAsd.repositories.ProdottoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,8 +25,15 @@ public class ProdottoService {
         return prodottoDAO.findAll(pageable);
     }
 
-    public Prodotto save(Prodotto body){
-        return prodottoDAO.save(body);
+    public Prodotto save(ProdottoDTO body){
+        Prodotto prodotto = new Prodotto();
+        prodotto.setNome(body.nome());
+        prodotto.setDescrizione(body.descrizione());
+        prodotto.setPrezzo(body.prezzo());
+        prodotto.setDisponibilità(body.disponibilità());
+        prodotto.setImage(body.image());
+        prodotto.setCategoria(body.categoria());
+        return prodottoDAO.save(prodotto);
     }
 
     public Prodotto findById(long id){
@@ -38,14 +46,14 @@ public class ProdottoService {
         prodottoDAO.delete(found);
     }
 
-    public Prodotto findByIdAndUpdate(long id, Prodotto body){
+    public Prodotto findByIdAndUpdate(long id, ProdottoDTO body){
         Prodotto found = this.findById(id);
-        found.setNome(body.getNome());
-        found.setDescrizione(body.getDescrizione());
-        found.setPrezzo(body.getPrezzo());
-        found.setDisponibilità(body.getDisponibilità());
-        found.setImage(body.getImage());
-        found.setCategoria(body.getCategoria());
+        found.setNome(body.nome());
+        found.setDescrizione(body.descrizione());
+        found.setPrezzo(body.prezzo());
+        found.setDisponibilità(body.disponibilità());
+        found.setImage(body.image());
+        found.setCategoria(body.categoria());
         return prodottoDAO.save(found);
     }
 }

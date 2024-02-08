@@ -1,10 +1,15 @@
 package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.PrenotazioneCorso;
+import carmencaniglia.exedraAsd.exceptions.BadRequestException;
+import carmencaniglia.exedraAsd.payloads.PrenotazioneDTO;
+import carmencaniglia.exedraAsd.payloads.PrenotazioneResponseDTO;
 import carmencaniglia.exedraAsd.services.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +35,20 @@ public class PrenotazioneController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PrenotazioneCorso savePrenotazione(@RequestBody PrenotazioneCorso newPrenotazionePayload){
-        return prenotazioneService.save(newPrenotazionePayload);
+    public PrenotazioneResponseDTO savePrenotazione(@RequestBody @Validated PrenotazioneDTO newPrenotazioneDTO, BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException("Errori nel payload!");
+        }else {
+            PrenotazioneCorso savedPrenotazione = prenotazioneService.save(newPrenotazioneDTO);
+            return new PrenotazioneResponseDTO(savedPrenotazione.getId());
+        }
     }
 
     @PutMapping("/{id}")
-    public PrenotazioneCorso findByIdAndUpdate(@PathVariable long id,@RequestBody PrenotazioneCorso modifiedPrenotazionePayload){
-        return prenotazioneService.findByIdAndUpdate(id, modifiedPrenotazionePayload);
+    public PrenotazioneResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated PrenotazioneDTO prenotazioneDTO){
+        PrenotazioneCorso updatedPrenotazione = prenotazioneService.findByIdAndUpdate(id, prenotazioneDTO);
+        return new PrenotazioneResponseDTO(updatedPrenotazione.getId());
     }
 
     @DeleteMapping("/{id}")

@@ -1,10 +1,15 @@
 package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.Prodotto;
+import carmencaniglia.exedraAsd.exceptions.BadRequestException;
+import carmencaniglia.exedraAsd.payloads.ProdottoDTO;
+import carmencaniglia.exedraAsd.payloads.ProdottoResponseDTO;
 import carmencaniglia.exedraAsd.services.ProdottoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +35,20 @@ public class ProdottoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Prodotto saveProdotto(@RequestBody Prodotto newProdottoPayload){
-        return prodottoService.save(newProdottoPayload);
+    public ProdottoResponseDTO saveProdotto(@RequestBody @Validated ProdottoDTO newProdottoDTO, BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException("Errori nel payload!");
+        }else {
+            Prodotto savedProdotto = prodottoService.save(newProdottoDTO);
+            return new ProdottoResponseDTO(savedProdotto.getId());
+        }
     }
 
     @PutMapping("/{id}")
-    public Prodotto findByIdAndUpdate(@PathVariable long id,@RequestBody Prodotto modifiedProdottoPayload){
-        return prodottoService.findByIdAndUpdate(id, modifiedProdottoPayload);
+    public ProdottoResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated ProdottoDTO prodottoDTO){
+        Prodotto updatedProdotto = prodottoService.findByIdAndUpdate(id,prodottoDTO);
+        return new ProdottoResponseDTO(updatedProdotto.getId());
     }
 
     @DeleteMapping("/{id}")

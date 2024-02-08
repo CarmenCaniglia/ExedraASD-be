@@ -2,10 +2,15 @@ package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.SchedaNutrizionale;
 import carmencaniglia.exedraAsd.entities.Utente;
+import carmencaniglia.exedraAsd.exceptions.BadRequestException;
+import carmencaniglia.exedraAsd.payloads.NutrizioneDTO;
+import carmencaniglia.exedraAsd.payloads.NutrizioneResponseDTO;
 import carmencaniglia.exedraAsd.services.NutrizioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +35,20 @@ public class NutrizioneController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SchedaNutrizionale saveSchedaNutrizionale(@RequestBody SchedaNutrizionale newNutrizionePayload){
-        return nutrizioneService.save(newNutrizionePayload);
+    public NutrizioneResponseDTO saveSchedaNutrizionale(@RequestBody @Validated NutrizioneDTO newNutrizioneDTO, BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException("Errori nel payload!");
+        }else {
+            SchedaNutrizionale savedScheda = nutrizioneService.save(newNutrizioneDTO);
+            return new NutrizioneResponseDTO(savedScheda.getId());
+        }
     }
 
     @PutMapping("/{id}")
-    public SchedaNutrizionale findByIdAndUpdate(@PathVariable long id,@RequestBody SchedaNutrizionale modifiedNutrizionePayload){
-        return nutrizioneService.findByIdAndUpdate(id, modifiedNutrizionePayload);
+    public NutrizioneResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated NutrizioneDTO nutrizioneDTO){
+        SchedaNutrizionale updatedScheda = nutrizioneService.findByIdAndUpdate(id,nutrizioneDTO);
+        return new NutrizioneResponseDTO(updatedScheda.getId());
     }
 
     @DeleteMapping("/{id}")
