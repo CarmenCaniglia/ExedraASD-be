@@ -40,8 +40,13 @@ public class UtenteController {
         return currentUser;
     }
     @PutMapping("/me")
-    public UserDetails getMeAndUpdate(@AuthenticationPrincipal Utente currentUser, @RequestBody Utente body){
-        return utenteService.findByIdAndUpdate(currentUser.getId(),body);
+    public UtenteResponseDTO getMeAndUpdate(@AuthenticationPrincipal Utente currentUser, @RequestBody @Validated UtenteDTO body,BindingResult validation){
+        if (validation.hasErrors()) {
+            throw new BadRequestException("Errori nel payload!");
+        }
+
+        Utente updatedUser = utenteService.findByIdAndUpdate(currentUser.getId(), body);
+        return new UtenteResponseDTO(updatedUser.getId());
     }
 
     @DeleteMapping("/me")
@@ -68,8 +73,12 @@ public class UtenteController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Utente findByIdAndUpdate(@PathVariable long id,@RequestBody Utente modifiedUserPayload){
-        return utenteService.findByIdAndUpdate(id, modifiedUserPayload);
+    public Utente findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated UtenteDTO body,BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException("Errori nella richiesta!");
+        }
+        return utenteService.findByIdAndUpdate(id, body);
     }
 
     @DeleteMapping("/{id}")

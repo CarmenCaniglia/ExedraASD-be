@@ -1,8 +1,6 @@
 package carmencaniglia.exedraAsd.services;
 
 import carmencaniglia.exedraAsd.entities.Utente;
-import carmencaniglia.exedraAsd.enums.Role;
-import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
 import carmencaniglia.exedraAsd.payloads.UtenteDTO;
 import carmencaniglia.exedraAsd.repositories.UtenteDAO;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
