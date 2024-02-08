@@ -36,12 +36,12 @@ public class DettaglioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DettaglioResponseDTO saveDettaglio(@RequestBody @Validated DettaglioDTO dettaglioDTO, BindingResult validation){
+    public DettaglioResponseDTO saveDettaglio(@RequestBody @Validated DettaglioDTO newDettaglioDTO, BindingResult validation){
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
             throw new BadRequestException("Errori nel payload!");
         }else{
-           DettaglioOrdine savedDettaglio = dettaglioService.save(dettaglioDTO);
+           DettaglioOrdine savedDettaglio = dettaglioService.save(newDettaglioDTO);
            return new DettaglioResponseDTO(savedDettaglio.getId());
         }
     }

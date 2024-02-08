@@ -36,12 +36,12 @@ public class CorsoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CorsoResponseDTO saveCorso(@RequestBody @Validated CorsoDTO corsoDTO, BindingResult validation){
+    public CorsoResponseDTO saveCorso(@RequestBody @Validated CorsoDTO newCorsoDTO, BindingResult validation){
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
             throw new BadRequestException("Errori nel payload!");
         }else{
-            Corso savedCorso = corsoService.save(corsoDTO);
+            Corso savedCorso = corsoService.save(newCorsoDTO);
             return new CorsoResponseDTO(savedCorso.getId());
         }
 
