@@ -1,5 +1,6 @@
 package carmencaniglia.exedraAsd.entities;
 
+import carmencaniglia.exedraAsd.enums.Giorno;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,8 @@ public class Corso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Enumerated(EnumType.STRING)
+    private Giorno giorno;
     private String nome;
     private String descrizione;
     private String orario;

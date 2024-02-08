@@ -1,6 +1,7 @@
 package carmencaniglia.exedraAsd.services;
 
 import carmencaniglia.exedraAsd.entities.Utente;
+import carmencaniglia.exedraAsd.enums.Role;
 import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.UnauthorizedException;
 import carmencaniglia.exedraAsd.payloads.UtenteDTO;
@@ -44,7 +45,7 @@ public class AuthService {
         nuovoUtente.setCognome(body.cognome());
         nuovoUtente.setEmail(body.email());
         nuovoUtente.setPassword(bcrypt.encode(body.password()));
-        nuovoUtente.setRole(body.role()); //role.USER
+        nuovoUtente.setRole(Role.USER); //body.role
         return utenteDAO.save(nuovoUtente);
     }
 }

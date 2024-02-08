@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Size;
 public record AbbonamentoDTO(@NotNull(message = "Il tipo di abbonamento è obbligatorio")
                              TipoAbbonamento tipoAbbonamento,
 
-                             @Min(value = 0, message = "Il prezzo deve essere maggiore o uguale a 0")
-                              double prezzo,
+                             /*@Min(value = 0, message = "Il prezzo deve essere maggiore o uguale a 0")
+                              double prezzo,*/
 
                              @Min(value = 1, message = "La durata deve essere di almeno 1 mese")
                               int durata,

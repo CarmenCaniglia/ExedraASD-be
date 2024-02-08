@@ -1,11 +1,11 @@
 package carmencaniglia.exedraAsd.payloads;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import carmencaniglia.exedraAsd.enums.Giorno;
+import jakarta.validation.constraints.*;
 
 public record CorsoDTO(
+        @NotNull(message = "Il giorno è obbligatorio")
+        Giorno giorno,
         @NotBlank(message = "Il nome è obbligatorio")
         @Size(min = 3, max = 50, message = "Il nome deve avere tra 3 e 50 caratteri")
         String nome,

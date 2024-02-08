@@ -2,6 +2,7 @@ package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.Corso;
 import carmencaniglia.exedraAsd.entities.Utente;
+import carmencaniglia.exedraAsd.enums.Giorno;
 import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.payloads.CorsoDTO;
 import carmencaniglia.exedraAsd.payloads.CorsoResponseDTO;
@@ -9,11 +10,13 @@ import carmencaniglia.exedraAsd.services.CorsoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/corsi")
@@ -57,5 +60,12 @@ public class CorsoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable long id){
         corsoService.findByIdAndDelete(id);
+    }
+
+    //---endpoint per il recupero di tutti i corsi
+    @GetMapping("/settimanali")
+    public ResponseEntity<Map<Giorno, List<CorsoDTO>>> getCorsiSettimanali() {
+        Map<Giorno, List<CorsoDTO>> corsiSettimanaliDTO = corsoService.getCorsiSettimanali();
+        return ResponseEntity.ok(corsiSettimanaliDTO);
     }
 }

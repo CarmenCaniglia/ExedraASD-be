@@ -2,6 +2,7 @@ package carmencaniglia.exedraAsd.services;
 
 import carmencaniglia.exedraAsd.entities.Corso;
 import carmencaniglia.exedraAsd.entities.Utente;
+import carmencaniglia.exedraAsd.enums.Giorno;
 import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
 import carmencaniglia.exedraAsd.payloads.CorsoDTO;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CorsoService {
@@ -28,6 +31,7 @@ public class CorsoService {
 
     public Corso save(CorsoDTO body){
         Corso corso = new Corso();
+        corso.setGiorno(body.giorno());
         corso.setNome(body.nome());
         corso.setDescrizione(body.descrizione());
         corso.setOrario(body.orario());
@@ -53,5 +57,23 @@ public class CorsoService {
         found.setOrario(body.orario());
         found.setMaxPartecipanti(body.maxPartecipanti());
         return corsoDAO.save(found);
+    }
+
+    //-----Recupero i corsi ordinati per giorno
+    public Map<Giorno,List<CorsoDTO>> getCorsiSettimanali(){
+        List<Corso> tuttiICorsi = corsoDAO.findAll();
+        Map<Giorno, List<CorsoDTO>> corsiSettimanaliDTO = tuttiICorsi.stream()
+                .collect(Collectors.groupingBy(
+                        Corso::getGiorno,
+                        Collectors.mapping(
+                                corso -> convertToCorsoDTO(corso),
+                                Collectors.toList()
+                        )
+                ));
+        return corsiSettimanaliDTO;
+    }
+    private CorsoDTO convertToCorsoDTO(Corso corso) {
+        // Implementa la conversione da Corso a CorsoDTO qui
+        return new CorsoDTO(corso.getGiorno(), corso.getNome(), corso.getDescrizione(), corso.getOrario(), corso.getMaxPartecipanti());
     }
 }
