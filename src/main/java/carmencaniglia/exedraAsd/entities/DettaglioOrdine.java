@@ -1,5 +1,6 @@
 package carmencaniglia.exedraAsd.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class DettaglioOrdine {
 
     @ManyToOne
     @JoinColumn(name = "ordine_id")
+    @JsonIgnore
     private Ordine ordine;
 
     @ManyToOne

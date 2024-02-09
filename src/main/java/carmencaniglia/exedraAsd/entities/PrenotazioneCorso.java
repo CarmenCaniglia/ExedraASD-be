@@ -1,5 +1,6 @@
 package carmencaniglia.exedraAsd.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class PrenotazioneCorso {
 
     @ManyToOne
     @JoinColumn(name = "utente_id")
+    @JsonIgnore
     private Utente utente;
 
     @ManyToOne

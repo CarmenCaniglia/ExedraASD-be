@@ -8,6 +8,7 @@ import carmencaniglia.exedraAsd.services.AbbonamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ public class AbbonamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public AbbonamentoResponseDTO saveAbbonamento(@RequestBody @Validated AbbonamentoDTO newAbbonamentoDTO, BindingResult validation){
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
@@ -46,6 +48,7 @@ public class AbbonamentoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public AbbonamentoResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated AbbonamentoDTO abbonamentoDTO){
         Abbonamento updatedAbbonamento = abbonamentoService.findByIdAndUpdate(id, abbonamentoDTO);
         return new AbbonamentoResponseDTO(updatedAbbonamento.getId());
@@ -53,6 +56,7 @@ public class AbbonamentoController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void findByIdAndDelete(@PathVariable long id){
         abbonamentoService.findByIdAndDelete(id);
     }

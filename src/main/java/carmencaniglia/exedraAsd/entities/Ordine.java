@@ -1,6 +1,7 @@
 package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.StatoOrdine;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class Ordine {
 
     @ManyToOne
     @JoinColumn(name = "utente_id")
+    @JsonIgnore
     private Utente utente;
 
     private Date dataOrdine;
