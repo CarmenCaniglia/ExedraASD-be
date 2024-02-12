@@ -1,6 +1,7 @@
 package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "utenti")
 @Getter
 @Setter
+@JsonIgnoreProperties({"password"})
 public class Utente implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
