@@ -14,8 +14,6 @@ public record ProdottoDTO(@NotBlank(message = "Il nome è un campo obbligatorio!
                           double prezzo,
                           @PositiveOrZero(message = "La disponibilità deve essere un valore positivo o zero!")
                           int disponibilità,
-                          @NotBlank(message = "L'immagine è un campo obbligatorio!")
-                          String image,
                           @NotNull(message = "La categoria è un campo obbligatorio!")
                           Categoria categoria) {
 }
