@@ -6,6 +6,7 @@ import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.exceptions.UnauthorizedException;
 import carmencaniglia.exedraAsd.payloads.UtenteDTO;
 import carmencaniglia.exedraAsd.payloads.UtenteLoginDTO;
+import carmencaniglia.exedraAsd.payloads.UtenteLoginResponseDTO;
 import carmencaniglia.exedraAsd.repositories.UtenteDAO;
 import carmencaniglia.exedraAsd.security.JWTTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,18 @@ public class AuthService {
     @Autowired
     private JWTTools jwtTools;
 
-    public String authenticateUser(UtenteLoginDTO body){
+    public UtenteLoginResponseDTO authenticateUser(UtenteLoginDTO body){
         Utente utente = utenteService.findByEmail(body.email());
         if(bcrypt.matches(body.password(),utente.getPassword())) {
-            return jwtTools.createToken(utente);
+            String token = jwtTools.createToken(utente);
+            Role role = utente.getRole(); // Ottieni il ruolo dell'utente
+            return new UtenteLoginResponseDTO(token, role);
         }else{
             throw new UnauthorizedException("Credenziali non valide!");
         }
     }
+
+
 
     public Utente save(UtenteDTO body){
         utenteDAO.findByEmail(body.email()).ifPresent(utente -> {

@@ -1,6 +1,7 @@
 package carmencaniglia.exedraAsd.controllers;
 
 import carmencaniglia.exedraAsd.entities.Utente;
+import carmencaniglia.exedraAsd.enums.Role;
 import carmencaniglia.exedraAsd.exceptions.BadRequestException;
 import carmencaniglia.exedraAsd.payloads.UtenteDTO;
 import carmencaniglia.exedraAsd.payloads.UtenteLoginDTO;
@@ -24,8 +25,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public UtenteLoginResponseDTO login(@RequestBody UtenteLoginDTO body){
-        String accessToken = authService.authenticateUser(body);
-        return new UtenteLoginResponseDTO(accessToken);
+        return authService.authenticateUser(body);
     }
 
     @PostMapping("/register")
