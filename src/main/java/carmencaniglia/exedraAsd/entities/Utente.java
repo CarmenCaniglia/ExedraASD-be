@@ -29,20 +29,20 @@ public class Utente implements UserDetails {
     private Role role;
     private String avatar;
 
-    @OneToMany(mappedBy = "utente")
-    private List<Abbonamento> abbonamenti;
+    @OneToOne(mappedBy = "utente")
+    private Abbonamento abbonamento;
 
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente", fetch = FetchType.EAGER)
     private List<PrenotazioneCorso> prenotazioniCorsi;
 
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",fetch = FetchType.EAGER)
+    private List<Ordine> ordini;
+
+   /* @OneToMany(mappedBy = "utente")
     private List<SchedaAllenamento> schedeAllenamento;
 
     @OneToMany(mappedBy = "utente")
-    private List<SchedaNutrizionale> schedeNutrizionali;
-
-    @OneToMany(mappedBy = "utente")
-    private List<Ordine> ordini;
+    private List<SchedaNutrizionale> schedeNutrizionali;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { //lista dei ruoli utente

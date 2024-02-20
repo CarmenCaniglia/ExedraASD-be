@@ -32,7 +32,6 @@ public class NutrizioneService {
         Utente utente = utenteDAO.findById(body.utenteId())
                 .orElseThrow(()-> new NotFoundException("Utente con id: "+body.utenteId()+" non trovato!"));
         SchedaNutrizionale scheda = new SchedaNutrizionale();
-        scheda.setUtente(utente);
         scheda.setTitolo(body.titolo());
         scheda.setDescrizione(body.descrizione());
 

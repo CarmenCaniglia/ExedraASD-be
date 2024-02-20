@@ -24,9 +24,8 @@ public class Abbonamento {
     private LocalDate dataFine;
     private String descrizione;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "utente_id")
-    @JsonIgnore
     private Utente utente;
 
     public void aggiornaDataFine() {

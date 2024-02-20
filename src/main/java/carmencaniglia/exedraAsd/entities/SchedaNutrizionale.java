@@ -13,12 +13,12 @@ public class SchedaNutrizionale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @ManyToOne
-    @JoinColumn(name = "utente_id")
-    @JsonIgnore
-    private Utente utente;
-
     private String titolo;
     private String descrizione;
+
+    /*@ManyToOne
+    @JoinColumn(name = "utente_id")
+    @JsonIgnore
+    private Utente utente;*/
+
 }

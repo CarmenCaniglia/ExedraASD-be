@@ -32,21 +32,23 @@ public class UtenteService {
     }
 
 
-    public Utente findById(long id){
-        return utenteDAO.findById(id).orElseThrow(()-> new NotFoundException(id));
+    public Utente findById(long id) {
+        return utenteDAO.findById(id)
+                .orElseThrow(() -> new NotFoundException("Utente con id " + id + " non trovato."));
     }
 
 
     public void findByIdAndDelete(long id){
-        Utente found = this.findById(id);
+        Utente found = utenteDAO.findById(id).orElseThrow(()-> new NotFoundException("Utente con id " + id + " non trovato"));
         utenteDAO.delete(found);
     }
 
     public Utente findByIdAndUpdate(long id, UtenteDTO utenteDTO){
-        Utente found = this.findById(id);
+        Utente found = utenteDAO.findById(id).orElseThrow(()-> new NotFoundException("Utente con id " + id + " non trovato"));
         found.setNome(utenteDTO.nome());
         found.setCognome(utenteDTO.cognome());
         found.setEmail(utenteDTO.email());
+        found.setRole(utenteDTO.role());
         return utenteDAO.save(found);
     }
 

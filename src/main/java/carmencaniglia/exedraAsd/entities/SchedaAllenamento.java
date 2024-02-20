@@ -13,11 +13,11 @@ public class SchedaAllenamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+private String titolo;
+    private String descrizione;
 
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "utente_id")
     @JsonIgnore
-    private Utente utente;
-    private String titolo;
-    private String descrizione;
+    private Utente utente;*/
 }

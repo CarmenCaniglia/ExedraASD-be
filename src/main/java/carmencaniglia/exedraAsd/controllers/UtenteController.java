@@ -39,10 +39,12 @@ public class UtenteController {
     }
 
     @GetMapping("/me")
+    @Transactional
     public UserDetails getProfile(@AuthenticationPrincipal UserDetails currentUser){
         return currentUser;
     }
     @PutMapping("/me")
+    @Transactional
     public UtenteResponseDTO getMeAndUpdate(@AuthenticationPrincipal Utente currentUser, @RequestBody @Validated UtenteDTO body,BindingResult validation){
         if (validation.hasErrors()) {
             throw new BadRequestException("Errori nel payload!");
@@ -53,6 +55,7 @@ public class UtenteController {
     }
 
     @DeleteMapping("/me")
+    @Transactional
     public void getMeAndDelete(@AuthenticationPrincipal Utente currentUser){
         utenteService.findByIdAndDelete(currentUser.getId());
     }
@@ -64,6 +67,7 @@ public class UtenteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
     public UtenteResponseDTO createUser(@RequestBody @Validated UtenteDTO newUserPayload, BindingResult validation){
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
@@ -76,6 +80,7 @@ public class UtenteController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Transactional
     public Utente findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated UtenteDTO body,BindingResult validation){
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
@@ -93,6 +98,7 @@ public class UtenteController {
 
     //endpoint per Multipart/Form-Data delle immagini
     @PostMapping("/{id}/upload")
+    @Transactional
     public String uploadAvatar(@PathVariable long id,@RequestParam("avatar") MultipartFile file ) throws IOException {
 
         return utenteService.uploadPicture(id, file);

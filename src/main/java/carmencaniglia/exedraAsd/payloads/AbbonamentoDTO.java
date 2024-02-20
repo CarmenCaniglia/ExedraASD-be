@@ -17,10 +17,7 @@ public record AbbonamentoDTO(@NotNull(message = "Il tipo di abbonamento è obbli
                              @NotNull(message = "La data di inizio è obbligatoria")
                              LocalDate dataInizio,
 
-                             @NotBlank(message = "La descrizione è obbligatoria")
-                             @Size(max = 255, message = "La descrizione non può superare i 255 caratteri")
                              String descrizione,
 
-                             @NotNull(message = "L'ID dell'utente è obbligatorio")
                              Long utenteId) {
 }

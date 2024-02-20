@@ -33,7 +33,6 @@ public class AllenamentoService {
                 .orElseThrow(()-> new NotFoundException("Utente con id: "+body.utenteId()+" non trovato!"));
 
         SchedaAllenamento allenamento = new SchedaAllenamento();
-        allenamento.setUtente(utente);
         allenamento.setDescrizione(body.descrizione());
         allenamento.setTitolo(body.titolo());
         return allenamentoDAO.save(allenamento);

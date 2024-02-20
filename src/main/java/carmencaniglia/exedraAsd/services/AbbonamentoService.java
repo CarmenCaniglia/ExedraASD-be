@@ -60,6 +60,7 @@ public class AbbonamentoService {
         };
     }
 
+    @Transactional
     public Abbonamento save(AbbonamentoDTO body){
         Abbonamento abbonamento = new Abbonamento();
         abbonamento.setTipoAbbonamento(body.tipoAbbonamento());
@@ -68,8 +69,12 @@ public class AbbonamentoService {
         abbonamento.setDataInizio(LocalDate.now());
         abbonamento.setDataFine(calcolaDataFine(abbonamento.getDataInizio(),abbonamento.getTipoAbbonamento()));
 
-        Utente utente = utenteService.findById(body.utenteId());
-        abbonamento.setUtente(utente);
+        if (body.utenteId() != null) {
+            Utente utente = utenteDAO.findById(body.utenteId())
+                    .orElseThrow(() -> new NotFoundException("Utente con id: " + body.utenteId() + " non trovato!"));
+            abbonamento.setUtente(utente);
+        }
+
         return abbonamentoDAO.save(abbonamento);
     }
 
@@ -89,7 +94,8 @@ public class AbbonamentoService {
         found.setDataFine(calcolaDataFine(found.getDataInizio(),found.getTipoAbbonamento()));
         found.setPrezzo(detPrezzo(body.tipoAbbonamento()));
         found.setTipoAbbonamento(body.tipoAbbonamento());
-        Utente utente = utenteService.findById(body.utenteId());
+        Utente utente = utenteDAO.findById(body.utenteId())
+                .orElseThrow(() -> new NotFoundException("Utente con id: " + body.utenteId() + " non trovato!"));
         found.setUtente(utente);
         return abbonamentoDAO.save(found);
     }
