@@ -1,6 +1,7 @@
 package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.TipoAbbonamento;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Abbonamento {
 
     @OneToOne
     @JoinColumn(name = "utente_id")
+    @JsonBackReference
     private Utente utente;
 
     public void aggiornaDataFine() {

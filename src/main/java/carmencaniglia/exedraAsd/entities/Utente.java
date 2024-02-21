@@ -2,6 +2,7 @@ package carmencaniglia.exedraAsd.entities;
 
 import carmencaniglia.exedraAsd.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,7 @@ public class Utente implements UserDetails {
     private String avatar;
 
     @OneToOne(mappedBy = "utente")
+    @JsonManagedReference
     private Abbonamento abbonamento;
 
     @OneToMany(mappedBy = "utente", fetch = FetchType.EAGER)

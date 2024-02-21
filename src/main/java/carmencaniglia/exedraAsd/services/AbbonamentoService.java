@@ -68,10 +68,12 @@ public class AbbonamentoService {
         abbonamento.setDescrizione(body.descrizione());
         abbonamento.setDataInizio(LocalDate.now());
         abbonamento.setDataFine(calcolaDataFine(abbonamento.getDataInizio(),abbonamento.getTipoAbbonamento()));
+        System.out.println("Salvataggio abbonamento per utente ID: " + body.utenteId());
 
         if (body.utenteId() != null) {
             Utente utente = utenteDAO.findById(body.utenteId())
                     .orElseThrow(() -> new NotFoundException("Utente con id: " + body.utenteId() + " non trovato!"));
+            System.out.println("Utente trovato: " + utente.getId());
             abbonamento.setUtente(utente);
         }
 
