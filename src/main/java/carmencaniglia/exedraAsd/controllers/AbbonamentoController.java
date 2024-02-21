@@ -36,6 +36,7 @@ public class AbbonamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+
     public AbbonamentoResponseDTO saveAbbonamento(@RequestBody @Validated AbbonamentoDTO newAbbonamentoDTO, BindingResult validation){
         System.out.println("Utente ID: " + newAbbonamentoDTO.utenteId());
         if(validation.hasErrors()){
