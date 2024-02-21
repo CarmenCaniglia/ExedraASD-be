@@ -79,7 +79,7 @@ public class UtenteController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @Transactional
     public Utente findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated UtenteDTO body,BindingResult validation){
         if(validation.hasErrors()){
