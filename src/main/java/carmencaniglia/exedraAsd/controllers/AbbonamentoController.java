@@ -36,7 +36,7 @@ public class AbbonamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public AbbonamentoResponseDTO saveAbbonamento(@RequestBody @Validated AbbonamentoDTO newAbbonamentoDTO, BindingResult validation){
         if(validation.hasErrors()){
             System.out.println(validation.getAllErrors());
