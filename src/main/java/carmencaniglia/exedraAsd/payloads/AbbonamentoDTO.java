@@ -19,5 +19,5 @@ public record AbbonamentoDTO(@NotNull(message = "Il tipo di abbonamento è obbli
 
                              String descrizione,
 
-                             Long utenteId) {
+                             long utenteId) {
 }

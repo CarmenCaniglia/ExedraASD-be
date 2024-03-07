@@ -50,7 +50,12 @@ public class AbbonamentoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public AbbonamentoResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated AbbonamentoDTO abbonamentoDTO){
+    public AbbonamentoResponseDTO findByIdAndUpdate(@PathVariable long id,@RequestBody @Validated AbbonamentoDTO abbonamentoDTO, BindingResult validation){
+        if(validation.hasErrors()){
+
+            throw new BadRequestException("Errori di validazione");
+        }
+
         Abbonamento updatedAbbonamento = abbonamentoService.findByIdAndUpdate(id, abbonamentoDTO);
         return new AbbonamentoResponseDTO(updatedAbbonamento.getId());
     }
