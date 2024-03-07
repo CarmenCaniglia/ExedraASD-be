@@ -3,14 +3,13 @@ package carmencaniglia.exedraAsd.services;
 import carmencaniglia.exedraAsd.entities.Abbonamento;
 import carmencaniglia.exedraAsd.entities.Utente;
 import carmencaniglia.exedraAsd.enums.TipoAbbonamento;
-import carmencaniglia.exedraAsd.exceptions.BadRequestException;
-import carmencaniglia.exedraAsd.exceptions.BusinessException;
 import carmencaniglia.exedraAsd.exceptions.NotFoundException;
 import carmencaniglia.exedraAsd.payloads.AbbonamentoDTO;
 import carmencaniglia.exedraAsd.repositories.AbbonamentoDAO;
 import carmencaniglia.exedraAsd.repositories.UtenteDAO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,15 +19,20 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+
 @Service
 public class AbbonamentoService {
 
     @Autowired
     private AbbonamentoDAO abbonamentoDAO;
-    @Autowired
+
     private UtenteService utenteService;
     @Autowired
     private UtenteDAO utenteDAO;
+
+    public AbbonamentoService(@Lazy UtenteService utenteService) {
+        this.utenteService = utenteService;
+    }
 
     public Page<Abbonamento> getAbbonamenti(int page, int size, String orderBy){
         if(size >= 100) size = 100;
@@ -70,18 +74,21 @@ public class AbbonamentoService {
         abbonamento.setDataFine(calcolaDataFine(abbonamento.getDataInizio(),abbonamento.getTipoAbbonamento()));
         System.out.println("Salvataggio abbonamento per utente ID: " + body.utenteId());
 
-        if (body.utenteId() != null) {
+
             Utente utente = utenteDAO.findById(body.utenteId())
                     .orElseThrow(() -> new NotFoundException("Utente con id: " + body.utenteId() + " non trovato!"));
             System.out.println("Utente trovato: " + utente.getId());
             abbonamento.setUtente(utente);
-        }
+
 
         return abbonamentoDAO.save(abbonamento);
     }
 
     public Abbonamento findById(long id){
-        return abbonamentoDAO.findById(id).orElseThrow(()-> new NotFoundException(id));
+        if (id == 0) {
+            throw new IllegalArgumentException("ID must not be null");
+        }
+        return abbonamentoDAO.findById(id).orElseThrow(() -> new NotFoundException("Abbonamento con id: " + id + " non trovato!"));
     }
 
     public void findByIdAndDelete(long id){
@@ -110,6 +117,14 @@ public class AbbonamentoService {
         };
     }
 
-
+    public void deleteByUtenteId(long utenteId) {
+        if (utenteId == 0) {
+            throw new IllegalArgumentException("ID utente must not be zero");
+        }
+        abbonamentoDAO.deleteByUtenteId(utenteId);
+    }
+    public List<Abbonamento> trovaAbbonamentiPerUtenteETipo(long utenteId, TipoAbbonamento tipoAbbonamento) {
+        return abbonamentoDAO.findAbbonamentiByUtenteIdAndTipo(utenteId, tipoAbbonamento);
+    }
 
 }

@@ -7,6 +7,7 @@ import carmencaniglia.exedraAsd.repositories.UtenteDAO;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,11 @@ public class UtenteService {
     @Autowired
     private Cloudinary cloudinaryUploader;
 
+    private AbbonamentoService abbonamentoService;
+
+    public UtenteService(@Lazy AbbonamentoService abbonamentoService) {
+        this.abbonamentoService = abbonamentoService;
+    }
 
     public Page<Utente> getUtenti(int page, int size, String orderBy){
         if(size >= 100) size = 100;
@@ -40,6 +46,7 @@ public class UtenteService {
 
     public void findByIdAndDelete(long id){
         Utente found = utenteDAO.findById(id).orElseThrow(()-> new NotFoundException("Utente con id " + id + " non trovato"));
+        abbonamentoService.deleteByUtenteId(id);
         utenteDAO.delete(found);
     }
 
